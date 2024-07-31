@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import logo from "./logo.svg";
+import { useState } from "react";
 import "./App.css";
 
 type ValueWithId<T> = {
@@ -22,7 +21,52 @@ const Counter = ({
   deleteCounter: (counter: CounterType) => void;
   resetCounter: (counter: CounterType) => void;
 }) => {
-  return <div></div>;
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        alignSelf: "stretch",
+        gap: 10,
+        borderWidth: 1,
+        borderRadius: 10,
+        padding: 10,
+        borderColor: "black",
+        borderStyle: "solid",
+        background: "#ddd",
+      }}
+    >
+      <p>{counter.value}</p>
+      <button
+        onClick={() => {
+          increment(counter);
+        }}
+      >
+        increment
+      </button>
+      <button
+        onClick={() => {
+          decrement(counter);
+        }}
+      >
+        decrement
+      </button>
+      <button
+        onClick={() => {
+          deleteCounter(counter);
+        }}
+      >
+        delete
+      </button>
+      <button
+        onClick={() => {
+          resetCounter(counter);
+        }}
+      >
+        resetCounter
+      </button>
+    </div>
+  );
 };
 
 function App() {
@@ -35,8 +79,9 @@ function App() {
       if (counter.id === inputCounter.id) {
         toPush.value += value;
       }
-      setCounters(newCounters);
+      newCounters.push(toPush);
     }
+    setCounters(newCounters);
   };
   const incrementCounter = (counter: CounterType) => {
     increaseCounterByValue(counter, 1);
@@ -51,8 +96,9 @@ function App() {
       if (counter.id === inputCounter.id) {
         toPush.value = 0;
       }
-      setCounters(newCounters);
+      newCounters.push(toPush);
     }
+    setCounters(newCounters);
   };
   const createNewCounter = () => {
     setCounters([...counters, { id: Math.random(), value: 0 }]);
@@ -64,12 +110,15 @@ function App() {
         continue;
       }
       newCounters.push({ ...counter });
-      setCounters(newCounters);
     }
+    setCounters(newCounters);
   };
 
   return (
-    <div className="App">
+    <div
+      className="App"
+      style={{ display: "flex", flexDirection: "column", gap: 10 }}
+    >
       {counters.map((counter) => {
         return (
           <Counter
@@ -78,6 +127,7 @@ function App() {
             decrement={decrementCounter}
             deleteCounter={deleteCounter}
             resetCounter={resetCounter}
+            key={counter.id}
           />
         );
       })}
@@ -86,15 +136,6 @@ function App() {
   );
 }
 
-const initialCounters: CounterType[] = [
-  {
-    id: 1,
-    value: 100,
-  },
-  {
-    id: 2,
-    value: 0,
-  },
-];
+const initialCounters: CounterType[] = [];
 
 export default App;
